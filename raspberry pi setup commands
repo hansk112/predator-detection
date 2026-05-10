@@ -1,0 +1,45 @@
+===========================
+Raspberry Pi SSH & Setup Commands
+===========================
+
+# --- Checking your current user on the Pi ---
+whoami
+
+# --- Fixing password lock issues ---
+sudo rm /etc/passwd.lock
+sudo rm /etc/shadow.lock
+sudo mount -o remount,rw /
+sudo passwd hans
+
+# --- Force‑setting password directly (bypasses lock issues) ---
+echo "hans:067581752" | sudo chpasswd
+
+# --- SSH into Raspberry Pi ---
+ssh hans@192.168.1.22
+
+# --- Clearing old SSH host keys on your laptop ---
+ssh-keygen -R 192.168.1.22
+
+# --- Checking system identity ---
+hostname
+uname -m
+
+# --- Updating Raspberry Pi OS ---
+sudo apt update
+sudo apt upgrade -y
+
+# --- Fixing broken packages if update was interrupted ---
+sudo dpkg --configure -a
+sudo apt --fix-broken install
+
+# --- Cleaning APT cache ---
+sudo apt clean
+
+# --- Testing Raspberry Pi camera ---
+rpicam-hello
+
+# --- Raspberry Pi configuration menu ---
+sudo raspi-config
+
+# --- Rebooting the Pi ---
+sudo reboot
