@@ -1,0 +1,156 @@
+Hans, here’s a **clean, chronological list of every command you used tonight**, split into **Ubuntu commands** and **Raspberry Pi commands**, so your brain has a tidy map of the whole session. This is the “memory snapshot” you can wake up to tomorrow and instantly recall everything.
+
+No fluff — just the commands, grouped by purpose, with Guided Links so you can jump deeper later if you want.
+
+---
+
+# ⭐ Ubuntu Commands (Your Laptop)
+
+## **Identify storage devices**
+```
+lsblk
+```
+
+## **Unmount SD card partitions**
+```
+sudo umount /dev/mmcblk0p1
+sudo umount /dev/mmcblk0p2
+sudo umount /media/hans/bootfs
+sudo umount /media/hans/rootfs
+```
+
+## **Check if anything is using the SD card**
+```
+sudo lsof | grep mmcblk0
+```
+
+## **Check read‑only status**
+```
+lsblk -o NAME,RO
+```
+
+## **Fix read‑only flag (if needed)**
+```
+sudo hdparm -r0 /dev/mmcblk0
+```
+
+## **Move OS image to /tmp**
+```
+mv 2024-07-04-raspios-bookworm-arm64.img.xz /tmp/
+cd /tmp
+```
+
+## **Extract the OS image**
+```
+unxz 2024-07-04-raspios-bookworm-arm64.img.xz
+```
+
+## **Flash Raspberry Pi OS**
+```
+sudo dd if=/tmp/2024-07-04-raspios-bookworm-arm64.img of=/dev/mmcblk0 bs=4M status=progress conv=fsync
+```
+
+## **Eject SD card**
+```
+sudo eject /dev/mmcblk0
+```
+
+## **Fix SSH “host key changed” error**
+```
+ssh-keygen -f "/home/hans/.ssh/known_hosts" -R "192.168.1.22"
+```
+
+## **SSH into the Pi**
+```
+ssh hans@192.168.1.22
+```
+
+## **Scan network (if needed)**
+```
+sudo nmap -sn 192.168.1.0/24
+```
+
+## **Ping the Pi**
+```
+ping 192.168.1.22
+```
+
+## **Open camera stream in VLC**
+```
+vlc tcp/h264://192.168.1.22:8888
+```
+
+---
+
+# ⭐ Raspberry Pi Commands (On the Pi via SSH)
+
+## **Check Pi IP**
+```
+hostname -I
+```
+
+## **Enable SSH (if needed)**
+```
+sudo raspi-config
+```
+
+## **Test camera preview**
+```
+rpicam-hello
+```
+
+## **Take a photo**
+```
+rpicam-still -o image.jpg
+```
+
+## **Record a 10‑second video**
+```
+rpicam-vid -t 10000 -o video.h264
+```
+
+## **Record video with audio**
+```
+rpicam-vid -t 10000 --audio -o video.mp4
+```
+
+## **Start live network stream (H.264)**
+```
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:8888
+```
+
+## **Check if stream is listening**
+```
+sudo ss -tulpn | grep 8888
+```
+
+## **Install MJPEG streamer (browser‑friendly)**
+```
+sudo apt install mjpg-streamer
+```
+
+## **Start MJPEG stream**
+```
+mjpg_streamer -i "input_uvc.so" -o "output_http.so -w /usr/share/mjpg-streamer/www -p 8080"
+```
+
+---
+
+# ⭐ Mental Notes (Your Brain’s TL;DR)
+
+- **SD card read‑only = adapter lock switch**  
+- **Flash workflow:** `lsblk → unmount → dd → eject`  
+- **SSH errors are normal after reflashing**  
+- **Bookworm uses `rpicam-*` tools**  
+- **Streaming is viewed in VLC, not the terminal**  
+- **You now have a fully working Pi camera node**
+
+---
+
+If you want, tomorrow I can turn this into a **GitHub‑ready README**, or help you set up:
+
+- **Auto‑start camera streaming**  
+- **Motion detection**  
+- **YOLO predator detection**  
+
+Sleep well, Hans.
