@@ -1,0 +1,287 @@
+# Troubleshooting Notes
+
+## Camera Preview Window Error
+
+### Symptom
+
+Running:
+
+```bash
+rpicam-hello
+```
+
+displayed:
+
+```text
+Preview window unavailable
+```
+
+### Cause
+
+Raspberry Pi was being accessed remotely via SSH from an Android phone.
+
+The `rpicam-hello` application attempts to open a local display window, but no display server was available.
+
+### Resolution
+
+Ignored the warning and used image capture commands instead:
+
+```bash
+rpicam-jpeg -o test.jpg
+```
+
+### Outcome
+
+Camera functionality verified despite preview warning.
+
+---
+
+## Confirming Camera Functionality
+
+### Initial Uncertainty
+
+The camera appeared to start but there was no visible image output.
+
+### Investigation
+
+Captured a JPEG:
+
+```bash
+rpicam-jpeg -o test.jpg
+```
+
+Verified file creation:
+
+```bash
+ls -lh test.jpg
+```
+
+### Resolution
+
+Hosted the file using Python HTTP server:
+
+```bash
+python3 -m http.server 8000
+```
+
+Viewed image from phone browser:
+
+```text
+http://192.168.1.22:8000/test.jpg
+```
+
+### Outcome
+
+Confirmed camera hardware and image capture were functioning correctly.
+
+---
+
+## HTTP Server Did Not Accept Commands
+
+### Symptom
+
+Typing commands appeared to have no effect.
+
+Pressing Enter moved the cursor but commands were not executed.
+
+### Cause
+
+The terminal was occupied by:
+
+```bash
+python3 -m http.server 8000
+```
+
+which runs continuously until stopped.
+
+### Resolution
+
+Terminate current process:
+
+```text
+Ctrl+C
+```
+
+or
+
+```bash
+pkill -f http.server
+```
+
+### Lesson Learned
+
+Always confirm shell prompt has returned before entering another command.
+
+---
+
+## TCP Stream Binding Failure
+
+### Symptom
+
+Running:
+
+```bash
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:8888
+```
+
+produced:
+
+```text
+failed to bind listen socket
+```
+
+### Cause
+
+Port 8888 was already occupied by a previous streaming process.
+
+### Investigation
+
+Checked active processes:
+
+```bash
+ps aux | grep rpicam
+```
+
+### Resolution
+
+Terminate existing stream:
+
+```bash
+pkill -f rpicam-vid
+```
+
+Restart on unused port:
+
+```bash
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:9999
+```
+
+### Outcome
+
+Video stream launched successfully.
+
+---
+
+## VLC Connection Testing
+
+### Symptom
+
+VLC connected to the stream but no visible video appeared.
+
+### Findings
+
+The camera stream process launched successfully but client-side viewing still required further debugging.
+
+### Status
+
+Pending future investigation.
+
+### Potential Areas to Check
+
+```bash
+sudo ss -tln | grep 9999
+```
+
+Verify:
+
+- Port is listening
+- Firewall not blocking traffic
+- VLC URI is correct
+
+---
+
+## Tailscale Installation Failure
+
+### Symptom
+
+Running:
+
+```bash
+sudo tailscale up
+```
+
+returned:
+
+```text
+sudo: tailscale: command not found
+```
+
+### Cause
+
+Tailscale had not yet been installed on Raspberry Pi.
+
+Phone-side installation and authentication completed successfully.
+
+### Diagnosis
+
+Verify installation:
+
+```bash
+which tailscale
+```
+
+### Planned Resolution
+
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+```
+
+followed by:
+
+```bash
+sudo tailscale up
+```
+
+### Status
+
+Pending.
+
+---
+
+## Mobile-Based Development Challenges
+
+### Challenges Encountered
+
+Configuration performed entirely from an Android phone using SSH.
+
+Common difficulties:
+
+- Limited terminal visibility
+- Difficult identification of active processes
+- Lack of multiple simultaneous terminal windows
+- Copy/paste limitations
+- No local display attached to Raspberry Pi
+
+### Mitigation
+
+Frequently verify:
+
+```bash
+ps aux
+```
+
+```bash
+hostname -I
+```
+
+```bash
+pwd
+```
+
+Use multiple SSH sessions where possible.
+
+---
+
+# Key Lessons Learned
+
+1. "Preview window unavailable" does **not** indicate camera failure.
+2. Verify image capture before attempting live streaming.
+3. Browser-served JPEGs are the fastest way to validate camera operation.
+4. Background services often occupy ports unexpectedly.
+5. Tailscale is preferable to public port forwarding for remote access.
+6. Motion-triggered snapshots are likely a better first milestone than continuous video processing.
+7. Building a reliable capture pipeline is more important than implementing AI early.
+
+---
+
+This would make an excellent `docs/dev-log-2026-10-02.md` file in your repository and provides enough context that Future Hans won't have to rediscover the same fixes in six months.
