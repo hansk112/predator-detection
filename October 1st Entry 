@@ -1,0 +1,389 @@
+Here's a GitHub-ready project log entry based on what you've accomplished so far.
+
+# Raspberry Pi Predator Detection Project - Development Log
+
+**Date:** 2 October 2026  
+**Author:** Hans Kalders
+
+## Objective
+
+Set up and validate a Raspberry Pi wildlife/predator monitoring system using an OV5647 camera module. Establish local camera access, investigate remote access options, and plan a motion-detection-based image processing pipeline.
+
+---
+
+## Hardware
+
+- Raspberry Pi 4
+- OV5647 Camera Module
+- Android phone for SSH access
+- Raspberry Pi OS (Bookworm)
+- SSH client on Android
+
+---
+
+## Achievements
+
+### 1. Camera Detection Verified
+
+Confirmed the Raspberry Pi could detect and initialise the OV5647 camera using the new `libcamera`/`rpicam` stack.
+
+Test command:
+
+```bash
+rpicam-hello
+```
+
+Observations:
+
+- Camera detected successfully
+- Frame stream running at approximately 30 fps
+- "Preview window unavailable" message appeared because system was accessed via SSH with no local display attached
+
+Result:
+
+✅ Camera operational
+
+---
+
+### 2. Image Capture Verified
+
+Captured a full-resolution JPEG image from the camera.
+
+Command:
+
+```bash
+rpicam-jpeg -o test.jpg
+```
+
+Verification:
+
+```bash
+ls -lh test.jpg
+```
+
+Result:
+
+```text
+test.jpg
+```
+
+created successfully (~667 KB).
+
+Result:
+
+✅ Camera image capture confirmed
+
+---
+
+### 3. Local HTTP File Access
+
+Created a temporary web server to access images directly from a phone browser.
+
+Command:
+
+```bash
+python3 -m http.server 8000
+```
+
+Access URL:
+
+```text
+http://192.168.1.22:8000
+```
+
+Outcome:
+
+- Directory listing available
+- Images viewable directly in mobile browser
+
+Result:
+
+✅ Local browser access working
+
+---
+
+### 4. Raspberry Pi Network Verification
+
+Obtained Raspberry Pi LAN address.
+
+Command:
+
+```bash
+hostname -I
+```
+
+Result:
+
+```text
+192.168.1.22
+```
+
+Result:
+
+✅ Network connectivity confirmed
+
+---
+
+### 5. TCP Video Streaming Experiment
+
+Attempted live video streaming using libcamera.
+
+Initial command:
+
+```bash
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:8888
+```
+
+Issue:
+
+```text
+failed to bind listen socket
+```
+
+Diagnosis:
+
+Existing process occupying specified port.
+
+Resolution:
+
+Terminate previous camera processes.
+
+```bash
+pkill -f rpicam-vid
+```
+
+Retry using alternate port:
+
+```bash
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:9999
+```
+
+Outcome:
+
+- Stream started correctly
+- Further client-side testing required
+
+Result:
+
+✅ Stream server launching successfully
+
+---
+
+### 6. Tailscale Investigation
+
+Goal:
+
+Establish secure remote access to Raspberry Pi without:
+
+- Port forwarding
+- Dynamic DNS
+- Cloud-hosting costs
+
+Android device:
+
+✅ Tailscale application installed and authenticated
+
+Observed Tailscale IP:
+
+```text
+100.98.128.83
+```
+
+Pi status:
+
+Attempted:
+
+```bash
+sudo tailscale up
+```
+
+Result:
+
+```text
+sudo: tailscale: command not found
+```
+
+Conclusion:
+
+Tailscale not yet installed on Raspberry Pi.
+
+Planned installation:
+
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+```
+
+Result:
+
+⚠️ Installation incomplete
+
+---
+
+## Planned Motion Detection Architecture
+
+### Stage 1
+
+Motion-triggered snapshots.
+
+Pipeline:
+
+```text
+Camera
+    ↓
+Frame comparison
+    ↓
+Motion detected
+    ↓
+Save image
+```
+
+Advantages:
+
+- Very low CPU usage
+- Minimal storage consumption
+- Fast implementation
+
+---
+
+### Stage 2
+
+Introduce object detection.
+
+Pipeline:
+
+```text
+Motion detected
+    ↓
+Capture snapshot
+    ↓
+YOLOv8
+    ↓
+Species classification
+```
+
+Target classes:
+
+- Possum
+- Rat
+- Stoat
+- Ferret
+- Hedgehog
+- Cat
+- Dog
+- Bird
+- Human
+
+---
+
+### Stage 3
+
+Notification system.
+
+Pipeline:
+
+```text
+Motion detected
+    ↓
+YOLO classification
+    ↓
+Predator identified
+    ↓
+Telegram alert
+    ↓
+Save event clip
+```
+
+---
+
+## Motion Package Evaluation
+
+Planned installation:
+
+```bash
+sudo apt update
+sudo apt install motion -y
+```
+
+Purpose:
+
+- Live web viewer
+- Motion-triggered snapshots
+- Event recording
+- Browser-accessible monitoring
+
+Potential web interfaces:
+
+```text
+http://192.168.1.22:8080
+```
+
+```text
+http://192.168.1.22:8081
+```
+
+Status:
+
+⚠️ Not yet tested
+
+---
+
+## Next Steps
+
+### Priority 1
+
+Complete Tailscale installation.
+
+Verify:
+
+```bash
+tailscale ip -4
+```
+
+Expected:
+
+```text
+100.x.x.x
+```
+
+---
+
+### Priority 2
+
+Install and configure Motion.
+
+```bash
+sudo apt install motion -y
+```
+
+---
+
+### Priority 3
+
+Verify motion-triggered image captures.
+
+---
+
+### Priority 4
+
+Deploy YOLOv8-based predator classification.
+
+---
+
+## Commands Used
+
+```bash
+rpicam-hello
+rpicam-jpeg -o test.jpg
+ls -lh test.jpg
+python3 -m http.server 8000
+hostname -I
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:8888
+pkill -f rpicam-vid
+ps aux | grep rpicam
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:9999
+sudo tailscale up
+sudo apt update
+sudo apt install motion -y
+```
+
+**Current project status:** Camera operational ✅, local image viewing operational ✅, remote access partially configured ⚠️, motion detection pending ⚠️, predator AI classification planned 🚀.
