@@ -1,0 +1,515 @@
+
+# Raspberry Pi Predator Detection Project
+
+## Milestone: Camera, Motion Detection & Remote Access
+
+**Date:** 2 October 2026
+
+## Objectives
+
+- Verify OV5647 camera operation
+- Capture and view images remotely
+- Implement motion-triggered snapshots
+- Configure secure remote access
+- Establish foundation for future AI predator classification
+
+---
+
+# Hardware
+
+- Raspberry Pi 4
+- OV5647 Camera Module
+- Android phone
+- Raspberry Pi OS Bookworm
+
+---
+
+# Final Working Architecture
+
+```text
+OV5647 Camera
+        ↓
+Picamera2
+        ↓
+OpenCV Motion Detection
+        ↓
+JPEG Snapshot Capture
+        ↓
+~/predator/events
+        ↓
+Python HTTP Server
+        ↓
+Tailscale Remote Access
+        ↓
+Phone Browser / SSH
+```
+
+---
+
+# Commands Used
+
+## Camera Verification
+
+```bash
+rpicam-hello
+```
+
+Result:
+
+```text
+Preview window unavailable
+```
+
+Camera detected successfully despite running headless via SSH.
+
+---
+
+## Test Image Capture
+
+```bash
+rpicam-jpeg -o test.jpg
+```
+
+Verify:
+
+```bash
+ls -lh test.jpg
+```
+
+---
+
+## Local File Viewing
+
+Start temporary web server:
+
+```bash
+python3 -m http.server 8000
+```
+
+Access:
+
+```text
+http://192.168.1.22:8000
+```
+
+---
+
+## Find Raspberry Pi IP
+
+```bash
+hostname -I
+```
+
+Result:
+
+```text
+192.168.1.22
+```
+
+---
+
+# Motion Streaming Investigation
+
+Attempted:
+
+```bash
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:8888
+```
+
+Encountered:
+
+```text
+failed to bind listen socket
+```
+
+Resolution:
+
+```bash
+pkill -f rpicam-vid
+```
+
+Retested using a different port:
+
+```bash
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:9999
+```
+
+Eventually abandoned in favour of OpenCV motion detection.
+
+---
+
+# Motion Package Investigation
+
+Installed:
+
+```bash
+sudo apt update
+sudo apt install motion -y
+```
+
+Verified:
+
+```bash
+motion -h
+```
+
+Installed compatibility tools:
+
+```bash
+sudo apt install v4l-utils -y
+```
+
+Camera visible via:
+
+```bash
+v4l2-ctl --list-devices
+```
+
+Motion failed under Bookworm:
+
+```text
+VIDIOC_STREAMON: Invalid argument
+```
+
+Decision:
+
+```text
+Abandon Motion.
+Use Picamera2 + OpenCV instead.
+```
+
+---
+
+# OpenCV Installation
+
+Installed:
+
+```bash
+sudo apt install python3-opencv -y
+```
+
+Verification:
+
+```bash
+python3 -c "import cv2; print(cv2.__version__)"
+```
+
+Result:
+
+```text
+4.6.0
+```
+
+---
+
+# Picamera2 Verification
+
+```bash
+python3 -c "from picamera2 import Picamera2; print('OK')"
+```
+
+Result:
+
+```text
+OK
+```
+
+---
+
+# Project Structure
+
+Created:
+
+```text
+~/predator/
+```
+
+and
+
+```text
+~/predator/events/
+```
+
+Commands:
+
+```bash
+mkdir -p ~/predator/events
+```
+
+---
+
+# Motion Detector Script
+
+Location:
+
+```text
+~/predator/motion_detector.py
+```
+
+Run:
+
+```bash
+python3 ~/predator/motion_detector.py
+```
+
+Successful output:
+
+```text
+Motion detected:
+/home/hans/predator/events/20261002_213040.jpg
+```
+
+```text
+Motion detected:
+/home/hans/predator/events/20261002_213043.jpg
+```
+
+---
+
+# Event Storage Location
+
+Images stored in:
+
+```text
+/home/hans/predator/events
+```
+
+View files:
+
+```bash
+ls -lh ~/predator/events
+```
+
+---
+
+# Remote Image Access
+
+Start HTTP server:
+
+```bash
+cd ~/predator/events
+
+python3 -m http.server 8000
+```
+
+Local:
+
+```text
+http://192.168.1.22:8000
+```
+
+Remote via Tailscale:
+
+```text
+http://100.81.140.115:8000
+```
+
+---
+
+# Tailscale Installation
+
+Repository already present.
+
+Installed:
+
+```bash
+sudo apt install tailscale -y
+```
+
+Authenticate:
+
+```bash
+sudo tailscale up
+```
+
+Verify:
+
+```bash
+tailscale ip -4
+```
+
+Result:
+
+```text
+100.81.140.115
+```
+
+---
+
+# Tailscale Devices
+
+Phone:
+
+```text
+100.98.128.83
+```
+
+Raspberry Pi:
+
+```text
+100.81.140.115
+```
+
+---
+
+# Remote SSH Access
+
+Successful connection:
+
+```bash
+ssh hans@100.81.140.115
+```
+
+Verified from mobile network using Tailscale.
+
+No port forwarding required.
+
+---
+
+# Troubleshooting Notes
+
+## Preview Window Error
+
+```text
+Preview window unavailable
+```
+
+Cause:
+
+- SSH session
+- No local display attached
+
+Not a camera fault.
+
+---
+
+## HTTP Server Appeared Frozen
+
+Cause:
+
+```bash
+python3 -m http.server 8000
+```
+
+takes over the terminal.
+
+Resolution:
+
+```text
+Ctrl+C
+```
+
+or
+
+```bash
+pkill -f http.server
+```
+
+---
+
+## Motion Package Failure
+
+Errors:
+
+```text
+VIDIOC_STREAMON: Invalid argument
+```
+
+```text
+V4L2 device failed to open
+```
+
+Cause:
+
+Bookworm/libcamera compatibility issues.
+
+Resolution:
+
+Switch to Picamera2 and OpenCV.
+
+---
+
+## Nano Editing on Mobile
+
+Issue:
+
+Python script formatting corrupted while editing via phone.
+
+Resolution:
+
+Create files using:
+
+```bash
+cat <<EOF
+...
+EOF
+```
+
+instead of nano when working from Android.
+
+---
+
+# Current Status
+
+```text
+Camera Detection                     ✅
+Image Capture                        ✅
+OpenCV Installed                     ✅
+Picamera2 Installed                  ✅
+Motion Detection                     ✅
+Snapshot Capture                     ✅
+Remote Web Access                    ✅
+Tailscale Installed                  ✅
+Remote SSH Access                    ✅
+```
+
+---
+
+# Next Milestones
+
+## Priority 1
+
+Auto-start detector at boot:
+
+```bash
+systemd service
+```
+
+## Priority 2
+
+Capture multiple images per event:
+
+```text
+Motion
+ ↓
+5 snapshots
+ ↓
+Save event folder
+```
+
+## Priority 3
+
+Telegram notifications
+
+```text
+Predator detected
+ ↓
+Send image to phone
+```
+
+## Priority 4
+
+YOLO classification
+
+```text
+Possum
+Rat
+Stoat
+Cat
+Bird
+Human
+```
+
+---
+
+Honestly, Hans, this was a **big night**. You went from *"I can't see the camera"* to a remotely accessible, motion-triggered wildlife camera with SSH access from anywhere in the world. 🚀📷🦔🐀
