@@ -1,0 +1,332 @@
+# Copilot Instructions
+
+Use this file as the source of truth for the Predator Detection Project.
+
+Assume all hardware and software details below are current unless otherwise stated.
+
+When providing advice:
+
+- Prefer Raspberry Pi OS Bookworm commands.
+- Prefer low-cost solutions.
+- Existing remote access is via Tailscale and ConnectBot on Android.
+- Motion detection currently uses OpenCV.
+- Camera interface uses Picamera2.
+- Future species classification will use YOLO.
+- Outdoor deployment uses a weatherproof enclosure with mains power from the house.
+- Preserve existing working functionality whenever suggesting changes.
+- Prioritise reliability over complexity.
+- Provide copy-pasteable commands where possible.
+
+---
+
+# Hardware and System Information
+
+## Project
+
+Outdoor predator detection system using a Raspberry Pi and OV5647 camera.
+
+Objectives:
+
+1. Detect animal movement.
+2. Capture event images.
+3. Store evidence images.
+4. Classify species using YOLO.
+5. Send notifications for significant detections.
+
+---
+
+## Raspberry Pi
+
+Hostname:
+
+```text
+raspberrypi
+```
+
+Architecture:
+
+```text
+arm64 (aarch64)
+```
+
+CPU:
+
+```text
+ARM Cortex-A72
+4 Cores
+1 Thread per Core
+Maximum Clock: 1.8 GHz
+Minimum Clock: 600 MHz
+```
+
+Exact model still to be confirmed:
+
+Run:
+
+```bash
+cat /proc/device-tree/model
+```
+
+and replace this section with actual model once known.
+
+---
+
+## Operating System
+
+```text
+Debian GNU/Linux 12 (Bookworm)
+```
+
+Kernel:
+
+```text
+Linux 6.6.31-rpt-rpi-v8
+```
+
+Full Kernel String:
+
+```text
+Linux raspberrypi 6.6.31-rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.6.31-1+rpt1 (2024-05-29) aarch64 GNU/Linux
+```
+
+---
+
+## Camera
+
+### Current Camera
+
+```text
+OV5647 Camera Module
+```
+
+Software:
+
+```text
+Picamera2
+```
+
+Camera Status:
+
+```text
+Working
+```
+
+Camera Detection Command:
+
+```bash
+rpicam-hello --list-cameras
+```
+
+---
+
+## Networking
+
+### SSH
+
+Access from Android via:
+
+```text
+ConnectBot
+```
+
+Example:
+
+```bash
+ssh hans@192.168.1.22
+```
+
+### Tailscale
+
+Installed and configured.
+
+Purpose:
+
+- Remote SSH access
+- Off-site management
+- Remote troubleshooting
+
+Status Check:
+
+```bash
+tailscale status
+```
+
+---
+
+## Software Stack
+
+Operating System:
+
+```text
+Debian 12 Bookworm
+```
+
+Programming Language:
+
+```bash
+python3 --version
+```
+
+OpenCV Version:
+
+```bash
+python3 -c "import cv2; print(cv2.__version__)"
+```
+
+Picamera2 Verification:
+
+```bash
+python3 -c "from picamera2 import Picamera2; print('Picamera2 OK')"
+```
+
+---
+
+## Current Functionality
+
+Working:
+
+- Raspberry Pi operational
+- Debian 12 Bookworm
+- 64-bit operating system
+- SSH access
+- Tailscale remote access
+- OV5647 camera
+- Picamera2
+- OpenCV motion detection
+- Event image capture
+- Local image storage
+
+Event Storage Location:
+
+```text
+~/predator/events
+```
+
+---
+
+## Planned Improvements
+
+### Near-Term
+
+- Automatic startup service
+- Multiple images per detection event
+- Better event logging
+- Improved enclosure
+
+### Long-Term
+
+- YOLO-based species identification
+- Confidence scoring
+- Mobile notifications
+- Email alerts
+- Event database
+- Time-lapse review system
+
+---
+
+## Outdoor Enclosure
+
+Current Prototype:
+
+```text
+re:fresh by Boost glass food container
+```
+
+Construction:
+
+- Glass base
+- Sealing lid
+- Locking clips
+- Existing vent hole suitable for cable routing
+
+Advantages:
+
+- Low cost
+- Readily available
+- Reasonably weather resistant
+- Transparent viewing surface
+- Suitable for prototype deployment
+
+Deployment Notes:
+
+- Mount under eave or sheltered location
+- Use silica gel packets
+- Seal cable entry with silicone
+- Position camera close to viewing surface
+- Run power from house via extension lead
+
+---
+
+## Useful System Commands
+
+Identify Pi:
+
+```bash
+cat /proc/device-tree/model
+```
+
+System Information:
+
+```bash
+hostnamectl
+```
+
+CPU Information:
+
+```bash
+lscpu
+```
+
+Memory:
+
+```bash
+free -h
+```
+
+Storage:
+
+```bash
+df -h /
+```
+
+Camera Detection:
+
+```bash
+rpicam-hello --list-cameras
+```
+
+Tailscale:
+
+```bash
+tailscale status
+```
+
+Python Version:
+
+```bash
+python3 --version
+```
+
+OpenCV Version:
+
+```bash
+python3 -c "import cv2; print(cv2.__version__)"
+```
+
+---
+
+## Next Data To Collect
+
+Paste outputs of:
+
+```bash
+cat /proc/device-tree/model
+free -h
+df -h /
+rpicam-hello --list-cameras
+python3 --version
+python3 -c "import cv2; print(cv2.__version__)"
+tailscale status
+```
+
+into this document to complete the hardware inventory.
