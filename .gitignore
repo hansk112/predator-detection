@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variables
+.env
+
+# SSH Keys
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# Tailscale
+tailscale-state*
+
+# Logs
+*.log
+logs/
+
+# Event captures
+events/
+detections/
+*.jpg
+*.jpeg
+*.png
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Temporary files
+*.tmp
+*.bak
