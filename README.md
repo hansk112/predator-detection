@@ -1,29 +1,37 @@
-# Raspberry Pi Camera & Remote Access Setup
+# Predator Detection Project
 
-This repository documents the setup, configuration, and troubleshooting steps used to prepare a Raspberry Pi for a camera‑based computer vision project.  
-It includes SSH setup, password recovery, system updates, camera testing, and environment preparation.
+An outdoor wildlife and predator detection system built using a Raspberry Pi and OV5647 camera.
 
----
+## Objectives
 
-## 🚀 Project Overview
+- Detect animal movement
+- Capture event photographs
+- Identify species using machine learning
+- Generate notifications for significant detections
+- Operate reliably outdoors
 
-This project uses a Raspberry Pi as a remote camera platform for future computer‑vision work (e.g., wildlife or predator detection).  
-The Pi is accessed remotely over SSH, allowing it to operate without a monitor, keyboard, or mouse.
+## Current Status
 
----
+See:
 
-## 📦 Requirements
+- PROJECT_STATUS.md
+- TODO.md
+- CHANGELOG.md
 
-- Raspberry Pi (any model with camera support)
-- Raspberry Pi OS (Bookworm or later recommended)
-- Camera Module (official or compatible)
-- SSH enabled
-- Laptop/desktop for remote access (Linux, macOS, or Windows)
+## Documentation
 
----
+See:
 
-## 🔐 SSH Access
+- docs/hardware.md
+- docs/software.md
+- docs/networking.md
+- docs/enclosure.md
 
-### Connect to the Raspberry Pi
-```bash
-ssh hans@192.168.1.22# predator-detection
+## Repository Structure
+
+- docs/ - Documentation
+- scripts/ - Python scripts
+- services/ - Systemd services
+- config/ - Configuration files
+- images/ - Reference images
+- archive/ - Historical project information
