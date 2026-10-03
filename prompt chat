@@ -1,0 +1,26 @@
+my project repository is:
+
+https://github.com/hansk112/predator-detection
+
+Use the repository as the source of truth.
+
+Please:
+
+1. Read COPILOT_CONTEXT.md first.
+2. Read PROJECT_STATUS.md second.
+3. Review TODO.md and CHANGELOG.md.
+4. Assume the documented hardware and software are current unless I tell you otherwise.
+5. Preserve existing working functionality when suggesting changes.
+6. Prefer Raspberry Pi OS Bookworm commands.
+7. Prefer low-cost, reliable solutions.
+8. Provide copy-pasteable commands where possible.
+
+My current task is:
+
+<describe what you're working on here>
+
+Before suggesting changes, summarise:
+- Current hardware
+- Current software
+- Current project status
+- Relevant open tasks
