@@ -1,0 +1,570 @@
+# Predator Detection Network Project
+## Vision: Distributed AI Wildlife Monitoring with Autonomous Drone Investigation
+
+### Project Goal
+
+Develop a scalable wildlife monitoring system that combines:
+
+- Ground-based AI camera nodes
+- LoRa communications
+- Central command and control
+- Autonomous drone investigation
+- Solar-powered charging stations
+- Future multi-drone capability
+
+The system will continuously monitor for predators such as possums, cats, hedgehogs, rats and stoats, then dispatch a drone to investigate and verify detections.
+
+---
+
+# System Architecture
+
+```text
+Ground Camera Nodes
+        │
+        ▼
+AI Detection
+(Motion + YOLO)
+        │
+        ▼
+LoRa Network
+        │
+        ▼
+Central Command Server
+        │
+        ▼
+Launch Decision Engine
+        │
+        ▼
+Autonomous Drone
+        │
+        ▼
+Perch Station / Charging Dock
+```
+
+---
+
+# Core Concept
+
+Traditional drones patrol continuously:
+
+```text
+Fly
+Hover
+Battery depleted
+Return
+```
+
+This wastes significant energy.
+
+Instead:
+
+```text
+Ground cameras detect activity
+↓
+Drone launched only when needed
+↓
+Drone investigates location
+↓
+Drone lands on perch station
+↓
+Motors off
+↓
+Long-duration observation
+↓
+Returns for charging
+```
+
+Ground sensors become the detectors.
+
+The drone becomes the investigator.
+
+---
+
+# Phase 0: Current Predator Camera
+
+## Status
+
+Current Hardware:
+
+- Raspberry Pi 4 (4 GB)
+- OV5647 camera
+- Picamera2
+- OpenCV motion detection
+- Wi-Fi connectivity
+- Tailscale remote access
+
+### Current Workflow
+
+```text
+Motion Detected
+↓
+Capture Snapshot
+↓
+Store Image
+```
+
+### Upgrade Goal
+
+```text
+Motion Detected
+↓
+Capture Snapshot
+↓
+YOLO Classification
+↓
+Identify Species
+↓
+Save Metadata
+↓
+Send Alert
+```
+
+### Target Species
+
+Initial:
+
+- Cat
+- Dog
+- Bird
+- Person
+
+Future:
+
+- Possum
+- Hedgehog
+- Rabbit
+- Rat
+- Stoat
+- Ferret
+
+---
+
+# Phase 1: AI Wildlife Classification
+
+## Objective
+
+Add YOLO object detection to current Pi system.
+
+### Deliverables
+
+- YOLOv8n deployed on Raspberry Pi 4
+- Automatic image classification
+- Bounding box generation
+- Confidence scoring
+- Metadata storage
+
+### Example Output
+
+```json
+{
+  "class": "cat",
+  "confidence": 0.94
+}
+```
+
+### Success Criteria
+
+```text
+Motion
+↓
+Image Capture
+↓
+YOLO Detection
+↓
+Classification Stored
+```
+
+### Budget
+
+$0-$200 NZD
+
+---
+
+# Phase 2: Field Detection Node
+
+## Objective
+
+Convert system into standalone solar-powered wildlife node.
+
+### Hardware
+
+- Pi Zero 2W
+- OV5647 Camera
+- Solar charger
+- Lithium battery
+- Waterproof enclosure
+
+### Functions
+
+- Motion detection
+- Wildlife classification
+- Local storage
+- Remote updates
+
+### Success Criteria
+
+30 days unattended operation.
+
+### Budget
+
+$150-$250 per node
+
+---
+
+# Phase 3: Wildlife Sensor Network
+
+## Objective
+
+Track animal movement across property.
+
+### Deployment
+
+```text
+Node A
+Node B
+Node C
+Node D
+Node E
+```
+
+connected via LoRa.
+
+### Workflow
+
+```text
+Node A detects possum
+↓
+Node B detects possum
+↓
+Node C detects possum
+↓
+Movement path calculated
+```
+
+### Benefits
+
+- Animal movement tracking
+- Location prediction
+- Drone interception capability
+
+### Budget
+
+$600-$1,000
+
+---
+
+# Phase 4: Central Command Server
+
+## Objective
+
+Create the system brain.
+
+### Hardware
+
+- Raspberry Pi 5
+- LoRa gateway
+- SSD storage
+
+### Responsibilities
+
+Receive:
+
+- Detection events
+- Images
+- Confidence values
+- GPS locations
+
+Perform:
+
+- Event filtering
+- Species validation
+- Drone dispatch decisions
+
+### Example Logic
+
+```python
+if species == "possum" and confidence > 0.90:
+    dispatch_drone()
+```
+
+### Budget
+
+$150-$300
+
+---
+
+# Phase 5: Autonomous Drone Dock
+
+## Objective
+
+Prove autonomous launch and recovery.
+
+### Hardware
+
+- Used DJI Mini 2 or similar
+- Raspberry Pi dock controller
+- Landing platform
+- Charging contacts
+- Solar power
+
+### Initial Mission
+
+```text
+Take Off
+↓
+Fly 50 metres
+↓
+Return
+↓
+Land
+↓
+Recharge
+```
+
+### Success Criteria
+
+100 successful autonomous dockings.
+
+### Budget
+
+$500-$1,000
+
+---
+
+# Phase 6: Drone Investigation
+
+## Objective
+
+Connect drone to detection network.
+
+### Workflow
+
+```text
+Detection
+↓
+Verification
+↓
+Drone Launch
+↓
+Fly to Location
+↓
+Capture Images
+↓
+Return Home
+```
+
+### Benefits
+
+- Visual verification
+- Reduced false positives
+- Additional intelligence gathering
+
+### Budget
+
+$400-$800
+
+---
+
+# Phase 7: Perch-and-Watch Capability
+
+## Objective
+
+Convert drone into stationary observation platform.
+
+### Concept
+
+Instead of hovering:
+
+```text
+Fly
+↓
+Land on perch
+↓
+Motors Off
+↓
+Observe
+```
+
+### Benefits
+
+Hovering:
+
+```text
+150 W+
+```
+
+Perched:
+
+```text
+2-5 W
+```
+
+Potential observation duration increases from:
+
+```text
+20 minutes
+```
+
+to:
+
+```text
+2-4+ hours
+```
+
+### Perch Types
+
+- Pole-mounted platform
+- Fence post
+- Rooftop station
+- Custom wildlife observation perch
+
+### Budget
+
+$200-$500
+
+---
+
+# Phase 8: Multi-Dock Network
+
+## Objective
+
+Expand operational radius.
+
+### Example Layout
+
+```text
+Dock A
+      \
+       \
+Dock B --- Dock C
+       /
+      /
+Dock D
+```
+
+### Drone Behaviour
+
+```text
+Investigate
+↓
+Land at nearest dock
+↓
+Recharge
+↓
+Continue mission
+```
+
+### Coverage
+
+One drone:
+
+- 20 hectares comfortably
+
+One drone + multiple docks:
+
+- 50-100 hectares
+
+---
+
+# Long-Term Vision
+
+## Farm Deployment
+
+Infrastructure:
+
+- 50 Camera Nodes
+- 5 Charging Stations
+- 1-2 Drones
+- Solar Powered
+- LoRa Network
+
+Coverage:
+
+```text
+50-100 hectares
+```
+
+---
+
+## Conservation Deployment
+
+Infrastructure:
+
+- Hundreds of Camera Nodes
+- Dozens of Charging Stations
+- Multiple Drones
+
+Coverage:
+
+```text
+500+ hectares
+```
+
+Suitable for:
+
+- Predator monitoring
+- Biodiversity studies
+- Conservation projects
+- Remote wildlife observation
+
+---
+
+# Key Technical Risks
+
+## High Priority
+
+### 1. Reliable Species Classification
+
+Solution:
+
+- Build local NZ predator dataset
+- Train custom YOLO model
+
+### 2. Autonomous Docking
+
+Solution:
+
+- Large landing pads
+- AprilTags
+- Visual guidance systems
+
+### 3. Weather Resilience
+
+Solution:
+
+- Wind limits
+- Rain detection
+- Weatherproof docks
+
+### 4. Communications
+
+Solution:
+
+- LoRa network
+- Local decision making
+- Event-based communication
+
+### 5. Power Management
+
+Solution:
+
+- Solar charging
+- Battery health monitoring
+- Efficient event-driven operation
+
+---
+
+# Immediate Next Steps
+
+1. Install YOLOv8n on current Pi.
+2. Integrate classification into motion detection workflow.
+3. Build predator image dataset.
+4. Deploy first outdoor AI node.
+5. Add LoRa communications.
+6. Construct first autonomous drone dock.
+
+---
+
+## Final Vision Statement
+
+Create a distributed autonomous predator-monitoring network where solar-powered AI camera nodes continuously watch the environment, communicate detections through a low-power network, and dispatch autonomous drones to investigate, verify, and track predator activity across large areas with minimal human intervention.
