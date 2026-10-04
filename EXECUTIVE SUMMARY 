@@ -1,0 +1,527 @@
+# Proposal: Autonomous Predator Detection and Drone Investigation Network
+
+## Prepared By
+Hans K.
+
+## Project Title
+**Distributed AI Wildlife Monitoring Network with Autonomous Drone Investigation**
+
+---
+
+# Executive Summary
+
+New Zealand's ongoing efforts to control invasive predators require efficient methods of detecting, monitoring, and tracking wildlife across large areas. Traditional trail cameras provide valuable monitoring capabilities but lack the ability to actively investigate detections or track animal movement over time.
+
+This proposal outlines the development of a scalable wildlife monitoring platform that combines artificial intelligence, low-power sensor networks, autonomous drones, and solar-powered infrastructure into a unified predator detection system.
+
+The proposed solution consists of a network of ground-based AI camera nodes that continuously monitor the environment. When a predator is detected, information is transmitted through a low-power communications network to a central command system. The command system then determines whether further investigation is required and can autonomously dispatch a drone to verify, track, and observe wildlife activity.
+
+The long-term vision is to create an autonomous conservation monitoring platform capable of covering large lifestyle blocks, farms, and conservation reserves with minimal human intervention.
+
+---
+
+# Background
+
+Current predator detection methods rely heavily on:
+
+- Manual trap inspections
+- Trail cameras
+- Human observation
+- Periodic wildlife surveys
+
+These approaches are labour-intensive and generally provide only static information about animal presence.
+
+Recent advances in:
+
+- Artificial intelligence
+- Edge computing
+- Low-power communications
+- Autonomous flight systems
+- Solar-powered electronics
+
+allow the development of a more capable and responsive monitoring platform.
+
+The proposed project seeks to leverage these technologies to create an intelligent wildlife observation network.
+
+---
+
+# Project Objectives
+
+The primary objectives of the project are:
+
+### Wildlife Detection
+
+Identify and classify wildlife species using AI-enabled camera systems.
+
+### Movement Tracking
+
+Track animal movement across multiple detection nodes to estimate direction and behaviour.
+
+### Autonomous Investigation
+
+Deploy unmanned aerial vehicles to investigate and confirm detections.
+
+### Long-Term Observation
+
+Utilise perch-based drone operation to maximise observation time while minimising power consumption.
+
+### Scalability
+
+Develop a modular architecture capable of expanding from a single-property deployment to regional conservation applications.
+
+---
+
+# System Overview
+
+The proposed system consists of five major components:
+
+## 1. Ground Detection Nodes
+
+Solar-powered camera stations continuously monitor their local area.
+
+Each node:
+
+- Detects motion
+- Captures images
+- Runs AI classification
+- Reports detected species
+- Operates autonomously
+
+### Typical Node Components
+
+- Raspberry Pi Zero 2W
+- Camera Module
+- Solar Panel
+- Battery System
+- LoRa Radio
+- Weatherproof Enclosure
+
+---
+
+## 2. Low-Power Communications Network
+
+Detection nodes communicate using LoRa technology.
+
+Benefits include:
+
+- Long range operation
+- Low power consumption
+- Simple infrastructure requirements
+- Excellent rural coverage
+
+Typical ranges:
+
+| Environment | Expected Range |
+|------------|------------|
+| Dense bush | 2-5 km |
+| Open farmland | 5-10 km |
+| Line of sight | 10+ km |
+
+---
+
+## 3. Central Command Server
+
+A central Raspberry Pi-based server acts as the decision-making component.
+
+Functions include:
+
+- Event collection
+- Image processing
+- Confidence scoring
+- Alert management
+- Drone dispatching
+- Data storage
+
+Example workflow:
+
+```text
+Detection Received
+↓
+Species Confirmed
+↓
+Confidence Calculated
+↓
+Launch Decision
+```
+
+---
+
+## 4. Autonomous Drone Platform
+
+Rather than continuously patrolling, drones are launched only when required.
+
+Responsibilities include:
+
+- Investigation of detections
+- Additional imagery collection
+- Species verification
+- Behaviour observation
+- Follow-up monitoring
+
+This significantly reduces energy consumption compared with constant aerial patrols.
+
+---
+
+## 5. Solar-Powered Charging Stations
+
+Charging stations provide:
+
+- Drone landing platforms
+- Battery charging
+- Communications relay
+- Mission staging
+
+These stations enable the drone to operate across large areas without always returning to a central base.
+
+---
+
+# Core Operating Concept
+
+The operating model centres around event-driven drone deployment.
+
+### Conventional Approach
+
+```text
+Drone Patrols Continuously
+↓
+High Battery Usage
+↓
+Limited Observation Time
+```
+
+### Proposed Approach
+
+```text
+Ground Sensors Monitor Environment
+↓
+Predator Detected
+↓
+Command Server Evaluates Event
+↓
+Drone Dispatched
+↓
+Drone Investigates
+↓
+Drone Lands on Perch Station
+↓
+Long-Term Observation
+```
+
+This architecture shifts the primary monitoring workload to low-cost ground sensors while reserving drone resources for targeted investigations.
+
+---
+
+# Development Roadmap
+
+## Phase 1: AI Predator Detection
+
+### Objective
+
+Upgrade the existing Raspberry Pi camera platform with AI classification capabilities.
+
+### Existing Hardware
+
+- Raspberry Pi 4 (4 GB)
+- OV5647 Camera
+- Picamera2
+- OpenCV Motion Detection
+- Wi-Fi Connectivity
+- Tailscale Remote Access
+
+### Deliverables
+
+- YOLOv8 image classification
+- Species detection
+- Confidence scoring
+- Event metadata generation
+
+### Success Criteria
+
+```text
+Motion Detected
+↓
+Snapshot Captured
+↓
+AI Classification Completed
+↓
+Species Logged
+```
+
+### Estimated Cost
+
+NZ$0-$200
+
+---
+
+## Phase 2: Autonomous Detection Node
+
+### Objective
+
+Create a solar-powered standalone field sensor.
+
+### Deliverables
+
+- Solar operation
+- Remote updates
+- AI classification
+- Continuous unattended operation
+
+### Success Criteria
+
+30-day autonomous operation without maintenance.
+
+### Estimated Cost
+
+NZ$150-$250 per node
+
+---
+
+## Phase 3: Sensor Network
+
+### Objective
+
+Deploy multiple nodes and track animal movement.
+
+### Example Layout
+
+```text
+Node A
+Node B
+Node C
+Node D
+Node E
+```
+
+### Capabilities
+
+- Direction prediction
+- Movement estimation
+- Multi-node tracking
+
+### Estimated Cost
+
+NZ$600-$1,000
+
+---
+
+## Phase 4: Command and Control Platform
+
+### Objective
+
+Develop a central decision-making system.
+
+### Deliverables
+
+- Event management
+- Drone dispatch engine
+- Dashboard
+- Data storage
+
+### Estimated Cost
+
+NZ$150-$300
+
+---
+
+## Phase 5: Autonomous Docking System
+
+### Objective
+
+Develop reliable launch and recovery capability.
+
+### Initial Testing
+
+```text
+Take Off
+↓
+Fly Short Route
+↓
+Return Home
+↓
+Land
+↓
+Recharge
+```
+
+### Success Criteria
+
+100 successful docking cycles.
+
+### Estimated Cost
+
+NZ$500-$1,000
+
+---
+
+## Phase 6: Drone Investigation Capability
+
+### Objective
+
+Enable drone response to wildlife detections.
+
+### Workflow
+
+```text
+Detection
+↓
+Verification
+↓
+Launch
+↓
+Investigation
+↓
+Return
+```
+
+### Estimated Cost
+
+NZ$400-$800
+
+---
+
+## Phase 7: Perch-and-Watch Operation
+
+### Objective
+
+Extend observation time by landing instead of hovering.
+
+### Operating Concept
+
+```text
+Fly
+↓
+Land
+↓
+Motors Off
+↓
+Observe
+```
+
+### Benefits
+
+| Mode | Approximate Power |
+|--------|--------:|
+| Hovering | 150W+ |
+| Perched Observation | 2-5W |
+
+Perching can increase observation duration from minutes to multiple hours.
+
+### Estimated Cost
+
+NZ$200-$500
+
+---
+
+## Phase 8: Multi-Dock Expansion
+
+### Objective
+
+Extend coverage area using multiple charging stations.
+
+### Advantages
+
+- Increased range
+- Reduced return flight time
+- Greater operational flexibility
+
+### Expected Coverage
+
+| Configuration | Coverage |
+|--------------|-----------|
+| Single Drone + Single Dock | 10-20 ha |
+| Single Drone + Multiple Docks | 50-100 ha |
+| Multiple Drones + Multiple Docks | 500+ ha |
+
+---
+
+# Technical Risks
+
+## Species Classification
+
+The system must accurately distinguish predators from non-target wildlife.
+
+### Mitigation
+
+- Local image dataset development
+- Continuous model improvement
+- Human review during training phase
+
+---
+
+## Autonomous Docking
+
+Reliable landing and charging is essential for long-term operation.
+
+### Mitigation
+
+- Large landing targets
+- Visual guidance markers
+- Redundant positioning systems
+
+---
+
+## Environmental Conditions
+
+Weather may impact drone operations.
+
+### Mitigation
+
+- Wind limits
+- Rain detection
+- Weather-aware mission planning
+
+---
+
+## Power Management
+
+Continuous operation depends on sufficient energy generation and storage.
+
+### Mitigation
+
+- Solar charging
+- Battery monitoring
+- Low-power operating modes
+
+---
+
+# Budget Estimate
+
+## Prototype System
+
+| Item | Estimated Cost (NZD) |
+|--------|--------:|
+| Existing Predator Camera | Existing Asset |
+| YOLO Development | $0-$200 |
+| Five Detection Nodes | $750-$1,250 |
+| Central Server | $150-$300 |
+| Autonomous Dock | $500-$1,000 |
+| Drone Platform | $400-$800 |
+| Miscellaneous Components | $200-$500 |
+
+### Total Prototype Budget
+
+**Approximately NZ$2,000-$4,000**
+
+---
+
+# Long-Term Vision
+
+The ultimate goal is to develop a distributed, autonomous wildlife monitoring network capable of:
+
+- Monitoring predator populations
+- Tracking animal movement
+- Supporting conservation operations
+- Investigating wildlife activity on demand
+- Scaling from lifestyle blocks to large conservation reserves
+
+By combining AI-powered edge devices with autonomous aerial investigation, the proposed solution has the potential to provide a cost-effective and scalable platform for wildlife monitoring throughout New Zealand.
+
+---
+
+# Conclusion
+
+This project presents a practical development pathway from an existing Raspberry Pi predator camera system to a fully autonomous monitoring network. By progressing through carefully defined phases, technical risks can be addressed incrementally while building valuable capability at each stage.
+
+The immediate focus is deployment of AI-based wildlife classification on the existing Raspberry Pi platform. Success at this stage establishes the foundation upon which the larger sensor network and autonomous drone infrastructure can be built.
+
+**Recommended Next Step:** Complete Phase 1 by integrating YOLO-based wildlife classification into the current Raspberry Pi predator detection system and begin collecting a custom New Zealand predator image dataset.
