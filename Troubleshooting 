@@ -1,0 +1,303 @@
+
+
+## Things I Broke and Fixed
+
+### 2026-10-02: Camera Not Detected
+
+#### Symptoms
+
+```bash
+rpicam-still
+```
+
+returned errors such as:
+
+```text
+No cameras available
+```
+
+or
+
+```text
+Failed to acquire camera
+```
+
+#### Cause
+
+The CSI ribbon cable was either:
+- not fully seated
+- inserted backwards
+- the connector latch was not fully closed
+
+#### Fix
+
+1. Power down the Pi.
+2. Open the CSI connector latch.
+3. Reinsert ribbon cable carefully.
+4. Ensure ribbon is square in the connector.
+5. Lock the latch.
+6. Reboot.
+
+#### Lesson Learned
+
+The CSI ribbon is delicate. Never pull the cable to move the camera.
+
+---
+
+### 2026-10-02: Motion Detector Not Saving Images
+
+#### Symptoms
+
+Motion detection ran but no image appeared in:
+
+```bash
+~/predator/events
+```
+
+#### Cause
+
+Incorrect file path or filename issue.
+
+#### Fix
+
+Verified event directory:
+
+```bash
+mkdir -p ~/predator/events
+```
+
+Updated image save location.
+
+#### Lesson Learned
+
+Always check:
+
+```bash
+ls ~/predator/events
+```
+
+after making changes.
+
+---
+
+### 2026-10-02: Unsure Whether Camera Was Stable
+
+#### Symptoms
+
+Camera appeared to work but reliability was unknown.
+
+#### Fix
+
+Created a stability test.
+
+Generated 100 photos:
+
+```bash
+for i in {1..100}
+do
+    rpicam-still -o ~/predator/stability_test/test_$i.jpg
+done
+```
+
+All images captured successfully.
+
+#### Lesson Learned
+
+Stress testing hardware is worthwhile before deployment.
+
+---
+
+### 2026-10-09: Wanted Remote Access
+
+#### Symptoms
+
+Needed a way to view images without SSH.
+
+#### Fix
+
+Started a lightweight web server:
+
+```bash
+cd ~/predator
+python3 -m http.server 8080
+```
+
+Accessed through Tailscale:
+
+```text
+http://100.81.140.115:8080
+```
+
+#### Lesson Learned
+
+A simple Python web server is often enough.
+
+---
+
+### 2026-10-09: Tried Running a URL in Bash
+
+#### Symptoms
+
+Entered:
+
+```bash
+http://100.81.140.115:8080/videos/test.mp4
+```
+
+into the terminal.
+
+Received:
+
+```bash
+-bash: No such file or directory
+```
+
+#### Cause
+
+A web URL is not a Linux command.
+
+#### Fix
+
+Open the URL in a browser instead.
+
+Example:
+
+```text
+http://100.81.140.115:8080/videos/test.mp4
+```
+
+#### Lesson Learned
+
+If it begins with:
+
+```text
+http://
+```
+
+it belongs in a browser, not a shell.
+
+---
+
+### 2026-10-09: First Video Recording Test
+
+#### Goal
+
+Verify camera can record video.
+
+#### Command
+
+```bash
+rpicam-vid \
+  --codec libav \
+  -t 10000 \
+  -o ~/predator/videos/test.mp4
+```
+
+#### Result
+
+✅ Video created successfully
+
+```bash
+ls ~/predator/videos
+```
+
+showed:
+
+```text
+test.h264
+test.mp4
+```
+
+#### Lesson Learned
+
+The camera is stable enough for both stills and video recording.
+
+---
+
+### 2026-10-09: Tailscale Success
+
+#### Goal
+
+Access predator camera from phone.
+
+#### Result
+
+Connected successfully using:
+
+```text
+100.81.140.115
+```
+
+and viewed images and videos remotely.
+
+#### Lesson Learned
+
+Tailscale is dramatically easier than port forwarding.
+
+---
+
+## Best Commands Learned So Far
+
+Show date:
+
+```bash
+date
+```
+
+Show files:
+
+```bash
+ls
+```
+
+Enter project folder:
+
+```bash
+cd ~/predator
+```
+
+Take photo:
+
+```bash
+rpicam-still -o test.jpg
+```
+
+Record video:
+
+```bash
+rpicam-vid --codec libav -t 10000 -o test.mp4
+```
+
+Start web server:
+
+```bash
+python3 -m http.server 8080
+```
+
+Check Tailscale:
+
+```bash
+tailscale status
+```
+
+Show Tailscale IP:
+
+```bash
+tailscale ip -4
+```
+
+---
+
+## Future Improvements
+
+- [ ] Save 5 images per trigger
+- [ ] Save 15-second video per trigger
+- [ ] Auto-start motion detector on boot
+- [ ] Create "latest.jpg" webpage
+- [ ] Add YOLO predator detection
+- [ ] Outdoor enclosure
+- [ ] Camera strain relief clip
+- [ ] Telegram phone notifications
+- [ ] Night-time testing
+
+That section alone will become a really useful engineering log for your predator camera project, because it's documenting real problems you've solved rather than generic Raspberry Pi notes.
