@@ -1,0 +1,226 @@
+
+# Raspberry Pi Predator Camera Notes
+
+**Last Updated:** 9 October 2026
+
+## Useful Navigation Commands
+
+Show current location:
+
+```bash
+pwd
+```
+
+List files:
+
+```bash
+ls
+```
+
+List files with details:
+
+```bash
+ls -lah
+```
+
+Change directory:
+
+```bash
+cd ~/predator
+```
+
+Go up one directory:
+
+```bash
+cd ..
+```
+
+---
+
+## Date and Time
+
+Show date and time:
+
+```bash
+date
+```
+
+Show timezone:
+
+```bash
+timedatectl
+```
+
+Example output:
+
+```text
+Fri 09 Oct 2026 20:33:10 NZDT
+```
+
+---
+
+## Camera Tests
+
+Take a photo:
+
+```bash
+rpicam-still -o test.jpg
+```
+
+Take a full-resolution photo:
+
+```bash
+rpicam-still --width 2592 --height 1944 -o fullres.jpg
+```
+
+Record a 10-second video:
+
+```bash
+rpicam-vid \
+  --codec libav \
+  -t 10000 \
+  -o test.mp4
+```
+
+Record a 30-second video:
+
+```bash
+rpicam-vid \
+  --codec libav \
+  -t 30000 \
+  -o test_30s.mp4
+```
+
+---
+
+## Web Server
+
+Start a web server:
+
+```bash
+cd ~/predator
+python3 -m http.server 8080
+```
+
+View files:
+
+```text
+http://100.81.140.115:8080
+```
+
+Events:
+
+```text
+http://100.81.140.115:8080/events/
+```
+
+Videos:
+
+```text
+http://100.81.140.115:8080/videos/
+```
+
+Stop web server:
+
+```bash
+Ctrl+C
+```
+
+Run in background:
+
+```bash
+nohup python3 -m http.server 8080 > server.log 2>&1 &
+```
+
+---
+
+## Tailscale
+
+Check status:
+
+```bash
+tailscale status
+```
+
+Show Tailscale IP:
+
+```bash
+tailscale ip -4
+```
+
+Current IP:
+
+```text
+100.81.140.115
+```
+
+---
+
+## Motion Detection Project
+
+Project location:
+
+```bash
+~/predator
+```
+
+Images:
+
+```bash
+~/predator/events
+```
+
+Videos:
+
+```bash
+~/predator/videos
+```
+
+Motion detector:
+
+```bash
+python3 motion_detector.py
+```
+
+---
+
+## Troubleshooting
+
+Camera detected:
+
+```bash
+rpicam-still -o test.jpg
+```
+
+Check running processes:
+
+```bash
+ps aux
+```
+
+Find web server:
+
+```bash
+ps aux | grep http.server
+```
+
+Check port 8080:
+
+```bash
+ss -tlnp | grep 8080
+```
+
+---
+
+## Commands I Learned
+
+| Date | Command | Purpose |
+|--------|----------|----------|
+| 09-Oct-2026 | `ls` | List files |
+| 09-Oct-2026 | `cd ~/predator` | Go to project |
+| 09-Oct-2026 | `python3 -m http.server 8080` | Web server |
+| 09-Oct-2026 | `rpicam-still -o test.jpg` | Take photo |
+| 09-Oct-2026 | `rpicam-vid -o test.mp4` | Record video |
+| 09-Oct-2026 | `date` | Show date/time |
+
+I would also add a section called **"Things I Broke and Fixed"**. As your predator detector grows, that often becomes the most valuable part of the documentation because it captures the lessons you've learned from real troubleshooting.
